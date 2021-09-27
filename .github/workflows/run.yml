@@ -22,7 +22,7 @@ jobs:
       - name: Generate cndtmb.m3u file
         run: |
           curl -sSL ${hkdtmb_list} >> cndtmb.m3u
-          curl -sSL ${cn_list} >> cndtmb.m3u
+          curl -sSL ${cn_list} | tail -n +2 >> cndtmb.m3u
 
       - name: Move files to publish directory
         run: |
