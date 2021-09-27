@@ -1,0 +1,42 @@
+name: Generate iptv list for CN and HK
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "00 23 * *"
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - "**/README.md"
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set variables
+        run: |
+          echo "RELEASE_NAME=Released on $(date +%Y%m%d%H%M)" >> $GITHUB_ENV
+          echo "hkdtmb_list=https://www.hkdtmb.com/list.m3u" >> $GITHUB_ENV
+          echo "cn_list=https://raw.githubusercontent.com/iptv-org/iptv/master/channels/cn.m3u" >> $GITHUB_ENV
+        shell: bash
+
+      - name: Generate cndtmb.m3u file
+        run: |
+          curl -sSL ${hkdtmb_list} >> cndtmb.m3u
+          curl -sSL ${cn_list} >> cndtmb.m3u
+
+      - name: Move files to publish directory
+        run: |
+          mkdir -p publish
+          cp cndtmb.m3u ./publish/
+
+      - name: Git push assets to "release" branch
+        run: |
+          cd publish
+          git init
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "action@github.com"
+          git checkout -b release
+          git add .
+          git commit -m "${{ env.RELEASE_NAME }}"
+          git remote add origin "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
+          git push -f origin release
