@@ -1,1 +1,1 @@
-"# custumized IPTV m3u8 list" 
+# Custumized IPTV m3u8 list
