@@ -16,13 +16,13 @@ jobs:
         run: |
           echo "RELEASE_NAME=Released on $(date +%Y%m%d%H%M)" >> $GITHUB_ENV
           echo "hkdtmb_list=https://raw.githubusercontent.com/maskedeken/iptv/main/hkdtmb.m3u" >> $GITHUB_ENV
-          echo "cn_list=https://raw.githubusercontent.com/iptv-org/iptv/master/channels/cn.m3u" >> $GITHUB_ENV
+          echo "cn_list=https://iptv-org.github.io/iptv/index.country.m3u" >> $GITHUB_ENV
         shell: bash
 
       - name: Generate cndtmb.m3u file
         run: |
           curl -sSL ${hkdtmb_list} >> cndtmb.m3u
-          curl -sSL ${cn_list} | tail -n +2 >> cndtmb.m3u
+          curl -sSL ${cn_list} | grep -A 1 'tvg-country="CN"' >> cndtmb.m3u
 
       - name: Move files to publish directory
         run: |
