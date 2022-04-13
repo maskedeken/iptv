@@ -22,7 +22,7 @@ jobs:
       - name: Generate cndtmb.m3u file
         run: |
           curl -sSL ${hkdtmb_list} >> cndtmb.m3u
-          curl -sSL ${cn_list} | grep -A 1 'tvg-country="CN"' >> cndtmb.m3u
+          curl -sSL ${cn_list} | grep -A 1 'tvg-country="CN"' | sed /--/d >> cndtmb.m3u
 
       - name: Move files to publish directory
         run: |
