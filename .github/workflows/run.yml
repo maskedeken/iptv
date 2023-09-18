@@ -1,8 +1,6 @@
 name: Generate iptv list for CN and HK
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "00 23 * * *"
   push:
     branches:
       - master
